@@ -1,0 +1,87 @@
+#include "shell.h"
+
+/* Function prototype for tokenize */
+char **tokenize(const char *user_input);
+
+/**
+ * exec_prompt - A function that executes a prompt.
+ * @user_input: a pointer to a character string
+ * Return: void
+ */
+void exec_prompt(const char *user_input)
+{
+    pid_t child_pid;
+
+    /* Creating a new process */
+    child_pid = fork();
+
+    /* Verifying success of fork */
+    if (child_pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    else if (child_pid == 0)
+    {
+        char **args = tokenize(user_input);
+
+        if (args == NULL)
+        {
+            perror("tokenize");
+            exit(EXIT_FAILURE);
+        }
+
+        /* executing the command with execvp */
+        if (execvp(args[0], args) == -1)
+        {
+            perror("execvp");
+            exit(EXIT_FAILURE);
+        }
+        /* Free the memory allocated for arguments */
+        free(args);
+    }
+    else
+    {
+        /* parent process waits for child to complete */
+        wait(NULL);
+    }
+}
+
+/**
+ * tokenize - A function to split the user input into arguments.
+ * @user_input: a pointer to a character string
+ * Return: an array of pointers to strings (arguments)
+ */
+char **tokenize(const char *user_input)
+{
+    /* Define MAX_ARGS as the maximum number of expected arguments*/
+    #define MAX_ARGS 64
+
+    char **args = malloc(MAX_ARGS * sizeof(char *));
+    if (args == NULL)
+    {
+        return NULL;
+    }
+
+    char *token;
+    int arg_count = 0;
+
+    /* Tokenize using whitespace as delimiter */
+    token = strtok((char *)user_input, " ");
+    while (token != NULL)
+    {
+        args[arg_count] = strdup(token);
+        if (args[arg_count] == NULL)
+        {
+            /* Memory allocation error */
+            return NULL;
+        }
+        arg_count++;
+        token = strtok(NULL, " ");
+    }
+
+    /* Add a NULL pointer at the end to mark the end of the arguments */
+    args[arg_count] = NULL;
+
+    return args;
+}
