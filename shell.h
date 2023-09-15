@@ -1,11 +1,13 @@
-#ifndef SHELL_H
-#define SHELL_H
+#ifndef BIGGY_SHELL_H
+#define BIGGY_SHELL_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+
+#define MAX_INPUT_SIZE 128
 
 
 /* Necessary function prototypes of helper functions */
@@ -17,9 +19,9 @@ void print_b(const char *string);
 void infinite_prompt(void);
 
 /* function prototype of prompt execution function */
-void exec_prompt(const char *user_inputs);
+void exec_prompt(const char *user_input);
 
-/* function prototype of parser function */ 
-void myparser_c(char *user_inputs, size_t size);
+/* function prototype of parser function */
+void myparser_c(char *user_input, size_t size);
 
-#endif /* SHELL_H */
+#endif /* Biggy_SHELL_H */

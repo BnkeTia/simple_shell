@@ -6,13 +6,31 @@
  */
 int main(void)
 {
-	char user_inputs[128];
+	char user_input[MAX_INPUT_SIZE];
+	size_t input_len;
 
 	while (1)
 	{
 		infinite_prompt();
-		exec_prompt(user_inputs);
-		myparser_c(user_inputs, sizeof(user_inputs));
+		if (fgets(user_input, sizeof(user_input), stdin) == NULL)
+		{
+			perror("fgets");
+			exit(EXIT_FAILURE);
+		}
+		/* Remove trailing newline character */
+		input_len = strlen(user_input);
+		if ((input_len > 0) && (user_input[input_len - 1]) == '\n')
+		{
+			user_input[input_len - 1] = '\0';
+		}
+		/* setting e condition for user to close shell */
+		if (strcmp(user_input, "exit") == 0)
+		{
+			break;
+		}
+
+		exec_prompt(user_input);
+		myparser_c(user_input, sizeof(user_input));
 	}
 	return (0);
 }
