@@ -20,6 +20,7 @@ void infinite_prompt(void);
 
 /* function prototype of prompt execution function */
 void exec_prompt(const char *user_input);
+extern char **environ; /* external declaration for the environment variable */
 
 /* function prototype of parser function */
 void myparser_c(char *user_input, size_t size);

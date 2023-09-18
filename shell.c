@@ -44,5 +44,5 @@ int main(void)
  */
 void infinite_prompt(void)
 {
-	print_b("Biggyshell$");
+	print_b("Biggyshell$ ");
 }
