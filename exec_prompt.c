@@ -10,7 +10,6 @@ void exec_prompt(const char *user_input)
 {
 	pid_t child_pid;
 	char **user_coms; /* declaration of an array of commands */
-	extern char **environ;
 
 	/* creating a new process */
 	child_pid = fork();
