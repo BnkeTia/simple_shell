@@ -23,7 +23,7 @@ int main(void)
 		{
 			user_input[input_len - 1] = '\0';
 		}
-		/* setting e condition for user to close shell */
+		/* setting a condition for user to close shell */
 		if (strcmp(user_input, "exit") == 0)
 		{
 			break;
@@ -31,12 +31,13 @@ int main(void)
 
 		exec_prompt(user_input);
 		myparser_c(user_input, sizeof(user_input));
+		/* displaying prompt after command execution */
+		infinite_prompt();
 	}
 	return (0);
 }
 
 /* Infinite prompt function that displays the prompt as long as shell runs */
-#include "shell.h"
 
 /**
  * infinite_prompt - A helper function that continuously displays the prompt.

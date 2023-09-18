@@ -9,7 +9,18 @@
 void exec_prompt(const char *user_input)
 {
 	pid_t child_pid;
-	char **user_coms; /* declaration of an array of commands */
+	char *user_coms[MAX_INPUT_SIZE]; /* declaration of an array of commands */
+	int aC = 0; /* keep track of number of arguments */
+	char *token;
+
+	token = strtok((char *)user_input, " ");
+	while (token != NULL)
+	{
+		user_coms[aC] = token;
+		token = strtok(NULL, " ");
+		aC++; /* increasing the number of arguments */
+	}
+	user_coms[aC] = NULL; /* add a null chracter to the end of the array */
 
 	/* creating a new process */
 	child_pid = fork();
@@ -22,25 +33,13 @@ void exec_prompt(const char *user_input)
 	}
 	else if (child_pid == 0)
 	{
-		/* allocate memory for the user_coms array */
-		user_coms = malloc(sizeof(char *) * 2);
-		if (user_coms == NULL)
-		{
-			perror("malloc but no array");
-			exit(EXIT_FAILURE);
-		}
-		user_coms[0] = (char *)user_input;
-		/* adding a null string to the array */
-		user_coms[1] = NULL;
-
 		/* executing the command with execve */
-		if (execve(user_input, user_coms, environ) == -1)
+		if (execve(user_coms[0], user_coms, environ) == -1)
 		{
-			fprintf(stderr, "Error: Failed to execute %s\n", user_input);
+			fprintf(stderr, "Error: Failed to execute %s\n", user_coms[0]);
 			perror("execve");
 			exit(EXIT_FAILURE);
 		}
-		free(user_coms); /* free my allocated memory */
 	}
 	else
 	{
