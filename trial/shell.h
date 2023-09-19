@@ -7,6 +7,8 @@
 #include <string.h>
 #include <sys/wait.h>
 
+
+/* define maximum input size */
 #define MAX_INPUT_SIZE 128
 
 
