@@ -7,6 +7,8 @@
 /* Define the maximum input size */
 #define MAX_INPUT_SIZE 128
 
+extern char **environ;
+
 /* Function prototypes */
 void print_b(const char *string);
 void infinite_prompt(void);

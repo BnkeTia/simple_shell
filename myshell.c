@@ -7,6 +7,8 @@
 /* Define the maximum input size */
 #define MAX_INPUT_SIZE 128
 
+extern char **environ;
+
 /* Function prototypes */
 void print_b(const char *string);
 void infinite_prompt(void);
@@ -26,7 +28,7 @@ int main(void)
         if (getline(&user_input, &input_len, stdin) == -1)
         {
             perror("getline");
-            free(user_input); /* Free dynamically allocated memory*/
+            free(user_input); /* Free dynamically allocated memory */
             exit(EXIT_FAILURE);
         }
 
@@ -66,16 +68,17 @@ void print_b(const char *string)
     write(STDOUT_FILENO, string, strlen(string));
 }
 
-/* Execute the command with arguments */
+/* Execute the command with arguments using execve */
 void exec_prompt(const char *user_input)
 {
     pid_t child_pid;
     char *token;
     char **user_coms = NULL;
-    int aC = 0; /* Number of arguments*/
+    int aC = 0; /* Number of arguments */
     int i;
+	
 
-    /* Tokenize the user input*/
+    /* Tokenize the user input */
     token = strtok((char *)user_input, " ");
     while (token != NULL)
     {
@@ -116,17 +119,20 @@ void exec_prompt(const char *user_input)
     }
     else if (child_pid == 0)
     {
-        /* Execute the command with arguments using execvp*/
-        if (execvp(user_coms[0], user_coms) == -1)
+        /* Specify the full path to the executable*/
+        char *full_path = "/usr/bin/ls"; /*Replace with the actual path*/
+
+        /* Execute the command with arguments using execve */
+        if (execve(full_path, user_coms, environ) == -1)
         {
             fprintf(stderr, "Error: Failed to execute %s\n", user_coms[0]);
-            perror("execvp");
+            perror("execve");
             exit(EXIT_FAILURE);
         }
     }
     else
     {
-        /* Parent process waits for the child to complete*/
+        /* Parent process waits for the child to complete */
         wait(NULL);
     }
 
