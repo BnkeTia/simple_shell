@@ -23,6 +23,6 @@ void infinite_prompt(void);
 /* function prototype of prompt execution function */
 void exec_prompt(const char *user_input);
 extern char **environ; /* external declaration for the environment variable */
-char** tok_input(const char *user_input, int *argc);
+char **tok_input(const char *user_input, int *argc);
 
 #endif /* Biggy_SHELL_H */
