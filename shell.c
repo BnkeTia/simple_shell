@@ -6,7 +6,7 @@
  */
 int main(void)
 {
-	char user_input = NULL; /*allocate dynamic memory for user input */
+	char *user_input = NULL; /*allocate dynamic memory for user input */
 	size_t input_len;
 
 	while (1)
@@ -33,7 +33,7 @@ int main(void)
 		}
 
 		exec_prompt(user_input);
-		myparser_c(user_input, sizeof(user_input));
+		/* display prompt after command execution */
 		infinite_prompt();
 	}
 	free(user_input); /* finall free malloc*/
