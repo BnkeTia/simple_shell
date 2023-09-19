@@ -31,8 +31,6 @@ int main(void)
 
 		exec_prompt(user_input);
 		myparser_c(user_input, sizeof(user_input));
-		/* displaying prompt after command execution */
-		infinite_prompt();
 	}
 	return (0);
 }
