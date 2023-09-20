@@ -28,13 +28,6 @@ int main(void)
 			free(user_input); /*free memory always */
 			break;
 		}
-<<<<<<< HEAD
-
-		exec_prompt(user_input);
-		myparser_c(user_input, sizeof(user_input));
-	} while (1);
-	exit(EXIT_SUCCESS);
-=======
 		else if (strcmp(user_input, "env") == 0)
 		{
 			while (*env != NULL)
@@ -49,8 +42,8 @@ int main(void)
 			exec_prompt(user_input);
 		}
 		infinite_prompt();/* display prompt after execution */
-	}
+	} while(1);
 	free(user_input); /* finall free malloc*/
->>>>>>> master
+	exit(EXIT_SUCCESS);
 	return (0);
 }
