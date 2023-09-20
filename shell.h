@@ -7,13 +7,8 @@
 #include <string.h>
 #include <sys/wait.h>
 
-<<<<<<< HEAD
+/***** MACROS *****/
 #define MAX_INPUT_SIZE 1024
-=======
-
-/* define maximum input size */
-#define MAX_INPUT_SIZE 128
->>>>>>> master
 
 
 /* Necessary function prototypes of helper functions */
