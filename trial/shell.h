@@ -7,13 +7,9 @@
 #include <string.h>
 #include <sys/wait.h>
 
-<<<<<<< HEAD
-#define MAX_INPUT_SIZE 1024
-=======
 
 /* define maximum input size */
 #define MAX_INPUT_SIZE 128
->>>>>>> master
 
 
 /* Necessary function prototypes of helper functions */
@@ -27,6 +23,8 @@ void infinite_prompt(void);
 /* function prototype of prompt execution function */
 void exec_prompt(const char *user_input);
 extern char **environ; /* external declaration for the environment variable */
-char **tok_input(const char *user_input, int *argc);
+
+/* function prototype of parser function */
+void myparser_c(char *user_input, size_t size);
 
 #endif /* Biggy_SHELL_H */

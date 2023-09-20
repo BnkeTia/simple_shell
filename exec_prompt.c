@@ -5,47 +5,44 @@
  * @user_input: a pointer to a character string
  * Return: void
  */
-
 void exec_prompt(const char *user_input)
 {
 	pid_t child_pid;
-	char **user_coms; /* declaration of an array of commands */
-	extern char **environ;
+	char **user_coms = NULL;
+	int aC = 0; /* keep track of number of arguments */
+	int i;
 
-	/* creating a new process */
+	/* calling the tokenizer */
+	user_coms = tok_input(user_input, &aC);
+
+	/* Creating a new child process */
 	child_pid = fork();
 
-	/* verifying success of fork */
-	if (child_pid == -1)
+	if (child_pid == -1)/* verifying success of fork */
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
 	else if (child_pid == 0)
 	{
-		/* allocate memory for the user_coms array */
-		user_coms = malloc(sizeof(char *) * 2);
-		if (user_coms == NULL)
-		{
-			perror("malloc but no array");
-			exit(EXIT_FAILURE);
-		}
-		user_coms[0] = (char *)user_input;
-		/* adding a null string to the array */
-		user_coms[1] = NULL;
+		char *full_path = "/usr/bin/ls";
 
-		/* executing the command with execve */
-		if (execve(user_input, user_coms, environ) == -1)
+		if (execve(full_path, user_coms, environ) == -1)
 		{
-			fprintf(stderr, "Error: Failed to execute %s\n", user_input);
+			fprintf(stderr, "Error: Failed to execute %s\n", user_coms[0]);
 			perror("execve");
 			exit(EXIT_FAILURE);
 		}
-		free(user_coms); /* free my allocated memory */
 	}
+
 	else
 	{
-		/* parent process waits for child to complete */
-		wait(NULL);
+		wait(NULL);/* parent process waits for child to complete */
 	}
+
+	for (i = 0; i < aC; i++)/*free dynamically allocated memory */
+	{
+		free(user_coms[i]);
+	}
+	free(user_coms);
 }
