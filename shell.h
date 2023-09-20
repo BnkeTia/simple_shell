@@ -7,7 +7,7 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#define MAX_INPUT_SIZE 128
+#define MAX_INPUT_SIZE 1024
 
 
 /* Necessary function prototypes of helper functions */

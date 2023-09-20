@@ -9,8 +9,7 @@ int main(void)
 	char user_input[MAX_INPUT_SIZE];
 	size_t input_len;
 
-	while (1)
-	{
+	do {
 		infinite_prompt();
 		if (fgets(user_input, sizeof(user_input), stdin) == NULL)
 		{
@@ -31,18 +30,7 @@ int main(void)
 
 		exec_prompt(user_input);
 		myparser_c(user_input, sizeof(user_input));
-	}
+	} while (1);
+	exit(EXIT_SUCCESS);
 	return (0);
-}
-
-/* Infinite prompt function that displays the prompt as long as shell runs */
-#include "shell.h"
-
-/**
- * infinite_prompt - A helper function that continuously displays the prompt.
- * Return: void
- */
-void infinite_prompt(void)
-{
-	print_b("cShell |\n|> ");
 }
