@@ -6,42 +6,44 @@
  */
 int main(void)
 {
-	char user_input[MAX_INPUT_SIZE];
+	char *user_input = NULL; /*allocate dynamic memory for user input */
 	size_t input_len;
+	char **env = environ;
 
 	while (1)
 	{
 		infinite_prompt();
-		if (fgets(user_input, sizeof(user_input), stdin) == NULL)
+		if (getline(&user_input, &input_len, stdin) == -1)
 		{
-			perror("fgets");
+			perror("getline");
+			free(user_input);/* free malloc memory*/
 			exit(EXIT_FAILURE);
 		}
-		/* Remove trailing newline character */
-		input_len = strlen(user_input);
+		input_len = strlen(user_input);/*remove trailing whitespaces*/
 		if ((input_len > 0) && (user_input[input_len - 1]) == '\n')
 		{
 			user_input[input_len - 1] = '\0';
 		}
-		/* setting a condition for user to close shell */
-		if (strcmp(user_input, "exit") == 0)
+		if (strcmp(user_input, "exit") == 0)/* exit condition*/
 		{
+			free(user_input); /*free memory always */
 			break;
 		}
-
-		exec_prompt(user_input);
-		myparser_c(user_input, sizeof(user_input));
+		else if (strcmp(user_input, "env") == 0)
+		{
+			while (*env != NULL)
+			{
+				print_b(*env);
+				print_b("\n");
+				env++;
+			}
+		}
+		else
+		{
+			exec_prompt(user_input);
+		}
+		infinite_prompt();/* display prompt after execution */
 	}
+	free(user_input); /* finall free malloc*/
 	return (0);
-}
-
-/* Infinite prompt function that displays the prompt as long as shell runs */
-
-/**
- * infinite_prompt - A helper function that continuously displays the prompt.
- * Return: void
- */
-void infinite_prompt(void)
-{
-	print_b("Biggyshell$ ");
 }

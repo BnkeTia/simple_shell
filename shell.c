@@ -10,7 +10,8 @@ int main(void)
 	size_t input_len;
 	char **env = environ;
 
-	do {
+	while (1)
+	{
 		infinite_prompt();
 		if (getline(&user_input, &input_len, stdin) == -1)
 		{
@@ -42,8 +43,7 @@ int main(void)
 			exec_prompt(user_input);
 		}
 		infinite_prompt();/* display prompt after execution */
-	} while(1);
+	}
 	free(user_input); /* finall free malloc*/
-	exit(EXIT_SUCCESS);
 	return (0);
 }
