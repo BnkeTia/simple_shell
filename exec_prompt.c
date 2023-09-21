@@ -8,55 +8,58 @@
 void exec_prompt(const char *user_input)
 {
 	pid_t child_pid;
-	char **user_coms = NULL;
-	int aC = 0; /* keep track of number of arguments */
-	int i;
-
-	/* calling the tokenizer */
-	user_coms = tok_input(user_input, &aC);
+	char **user_comA, *exec, *com_path;
+	int i, aC;
+	char *env[] = {NULL};
+	char *token;
 
 	/* Creating a new child process */
 	child_pid = fork();
 
 	if (child_pid == -1)/* verifying success of fork */
 	{
-		perror("fork");
-		exit(EXIT_FAILURE);
+		perror("forking error");
 	}
+
 	else if (child_pid == 0)
 	{
-		char *full_path = "/usr/bin/ls";
-
-		/* Creating an array of arguments for the execve function */
-		char **args = (char **)malloc((aC + 1) * sizeof(char *));
-		if (args == NULL)
+		user_comA = malloc(128 * sizeof(char *));
+		if (user_comA == NULL)
 		{
 			perror("malloc failed");
 			exit(EXIT_FAILURE);
 		}
-
-		for (i = 0; i < aC; i++)
+		token = strtok((char *)user_input, " ");
+		while (token != NULL)
 		{
-			args[i] = user_coms[i];
+			user_comA[i++] = token;
+			token = strtok(NULL, " ");
 		}
-		args[aC] = NULL;
-
-		if (execve(full_path, user_coms, environ) == -1)
+		user_comA[i] = NULL;
+		/* indicate the path to the executable */
+		exec = user_comA[0];
+		com_path = "/bin/";
+		com_path = malloc(strlen(com_path) + strlen(exec) + 1);
+		if (com_path == NULL)
 		{
-			fprintf(stderr, "Error: Failed to execute %s\n", args[0]);
-			perror("execve");
+			perror("malloc failed");
 			exit(EXIT_FAILURE);
 		}
+		strcpy(com_path, "/usr/bin/");
+		strcat(com_path, exec);
+
+		if (execve(com_path, user_comA, env) == -1)
+		{
+			perror("failed to execute");
+			exit(EXIT_FAILURE);
+		}
+		free(com_path);
+		free(user_comA);
 	}
 
 	else
 	{
-		wait(NULL);/* parent process waits for child to complete */
+		/* parent process wait for chile to finish */
+		waitpid(child_pid, &aC, 0);
 	}
-
-	for (i = 0; i < aC; i++)/*free dynamically allocated memory */
-	{
-		free(user_coms[i]);
-	}
-	free(user_coms);
 }
